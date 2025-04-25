@@ -1,7 +1,9 @@
-app = "cgpu-allinone"   # Change this to your app's name
+app = "test-flyio-gpu"   # Change this to your app's name
 primary_region = "ord"  # If you change this, ensure it's to a region that offers GPUs
-vm.size = "a100-40gb"   # A shorthand for the size preset in the [[vm]] section
 swap_size_mb = 32768    # This enables 32GB swap
+
+[[vm]]
+size = "l40s"
 
 [build]
   [build.args]
@@ -12,4 +14,4 @@ swap_size_mb = 32768    # This enables 32GB swap
 [mounts]
 source = "data"
 destination = "/home/pythonuser" # Make sure this matches the value of the NONROOT_USER build arg
-# initial_size = "200gb" # Uncomment to set the size for the volume created on first deployment
+initial_size = "50gb" # Uncomment to set the size for the volume created on first deployment
