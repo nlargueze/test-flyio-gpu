@@ -1,19 +1,8 @@
-FROM ubuntu:22.04
-RUN apt update -q && apt install -y python3 python3-pip python3-venv python3-wheel git nano && \
-    apt clean && rm -f /var/lib/apt/lists/*_*
+FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04
 
-ARG NONROOT_USER
-RUN echo "User will be $NONROOT_USER"
-ENV PYTHON_USER=$NONROOT_USER
+RUN apt-get update && apt-get install -y python3-pip && \
+    pip3 install jupyterlab
 
-# Create unprivileged user with a home dir and using bash
-RUN useradd -ms /bin/bash $PYTHON_USER
+EXPOSE 8888
 
-COPY --chmod=0755 ./entrypoint.sh ./entrypoint.sh
-COPY --chown=$PYTHON_USER:$PYTHON_USER --chmod=0755 ./post-initialization.sh ./post-initialization.sh
-# If you have a requirements.txt for the project, uncomment this and
-# adjust post-initialization.sh to use it
-# COPY --chown=$PYTHON_USER:$PYTHON_USER requirements.txt .
-
-# CMD ["sleep", "inf"]
-CMD ["/bin/bash", "-c", "./entrypoint.sh $PYTHON_USER"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
